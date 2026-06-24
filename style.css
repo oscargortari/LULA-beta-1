@@ -1,0 +1,615 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+
+#canvas {
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  position: relative;
+}
+
+.node {
+  position: absolute;
+  padding: 4px;
+  background: transparent;
+  border: none;
+  color: black;
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  cursor: grab;
+  user-select: none;
+  outline: none;
+}
+
+.node.primary-selected {
+  color: rgba(188, 81, 200, 0.928);
+  font-weight: bold;
+}
+
+.node.secondary-selected {
+  color: #f781db;
+  font-weight: bold;
+}
+
+#toolbar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+
+body.editor-mode #canvas {
+  background: #eeeeee;
+}
+
+body.presentation-mode #canvas {
+  background: white;
+}
+
+#connections {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+path {
+  stroke: black;
+  stroke-width: 2;
+  fill: none;
+}
+#helpPanel {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 10;
+  font-size: 12px;
+  line-height: 1.3;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #333;
+  max-width: 210px;
+}
+
+#helpPanel p {
+  margin: 4px 0;
+}
+#world {
+  position: absolute;
+  width: 20000px;
+  height: 20000px;
+  transform-origin: 0 0;
+}
+
+#connections {
+  position: absolute;
+  width: 20000px;
+  height: 20000px;
+  pointer-events: none;
+  overflow: visible;
+}
+#connections line {
+  overflow: visible;
+}
+
+#selectionBox {
+  position: fixed;
+  border: 1px dashed #4147ff;
+  background: rgba(246, 47, 104, 0.366);
+  display: none;
+  pointer-events: none;
+  z-index: 9999;
+}
+#currentFile {
+  margin-left: 10px;
+  font-size: 12px;
+  color: #666;
+}
+body.editor-mode {
+  background: #ececec;
+}
+
+body.editor-mode .node {
+  padding: 6px 10px;
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  background: rgba(134, 24, 236, 0.535);
+}
+
+body.presentation-mode {
+  background: white;
+}
+
+body.presentation-mode .node {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+body.editor-mode .node::after {
+  content: attr(data-z-label);
+  display: block;
+  font-size: 9px;
+  color: #777;
+  margin-top: 2px;
+}
+
+#threeContainer {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 1;
+  pointer-events: none;
+}
+
+#toolbar,
+#helpPanel {
+  z-index: 20;
+}
+button.active-mode {
+  filter: brightness(1.08);
+}
+
+button.inactive-mode {
+  filter: brightness(0.96);
+}
+
+body.dragging-map,
+body.dragging-map * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+#helpHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#collapseHelpButton {
+  font-size: 12px;
+  padding: 1px 6px;
+}
+
+#helpPanel.collapsed #helpContent {
+  display: none;
+}
+
+:root {
+  --ui-bg: rgba(255, 255, 255, 0.82);
+  --ui-border: rgba(0, 0, 0, 0.08);
+  --ui-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  --accent: #b86cff;
+  --accent-dark: #8f3df2;
+  --text: #171717;
+  --muted: #777;
+}
+
+body {
+  background: #f4f4f6;
+  color: var(--text);
+}
+
+#canvas {
+  background:
+    radial-gradient(circle at top left, rgba(184,108,255,0.12), transparent 28%),
+    linear-gradient(180deg, #fafafa 0%, #eeeeee 100%);
+}
+
+#toolbar {
+  top: 16px;
+  left: 16px;
+  padding: 10px;
+  border-radius: 18px;
+  background: var(--ui-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--ui-border);
+  box-shadow: var(--ui-shadow);
+  gap: 6px;
+  align-items: center;
+}
+
+button {
+  border: 1px solid rgba(0,0,0,0.08);
+  background: white;
+  color: #222;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+#addNode,
+#publishMode {
+  background: var(--accent);
+  color: white;
+  border-color: transparent;
+}
+
+#publishMode {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+}
+
+#currentFile {
+  color: var(--muted);
+  font-size: 11px;
+  padding: 0 8px;
+}
+
+#helpPanel {
+  top: 16px;
+  right: 16px;
+  max-width: 240px;
+  border-radius: 18px;
+  background: var(--ui-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--ui-border);
+  box-shadow: var(--ui-shadow);
+  padding: 14px;
+}
+
+#helpHeader {
+  margin-bottom: 8px;
+}
+
+#helpContent p {
+  color: #444;
+  font-size: 12px;
+  margin: 6px 0;
+}
+
+.node {
+  border-radius: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+body.editor-mode .node {
+  border: 1px solid rgba(143, 61, 242, 0.25);
+  background: rgba(184, 108, 255, 0.72);
+  color: white;
+  box-shadow: 0 8px 22px rgba(143, 61, 242, 0.18);
+}
+
+body.editor-mode .node:hover {
+  transform: translateY(-1px);
+}
+
+body.editor-mode .node::after {
+  color: rgba(255,255,255,0.72);
+}
+
+.node.primary-selected {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.node.secondary-selected {
+  outline: 2px solid #f781db;
+  outline-offset: 3px;
+}
+
+path {
+  stroke-width: 2.4;
+}
+#toolbar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  right: auto;
+  z-index: 20;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  max-width: calc(100vw - 360px);
+  padding: 12px;
+
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 22px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+#toolbar button {
+  position: static;
+  white-space: nowrap;
+}
+
+body.editor-mode .node {
+  min-width: 92px;
+  min-height: 42px;
+  padding: 8px 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  border-radius: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.75);
+  background: rgba(184, 108, 255, 0.78);
+  color: white;
+
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.05;
+
+  box-shadow: 0 12px 28px rgba(143, 61, 242, 0.18);
+}
+
+body.editor-mode .node::after {
+  position: absolute;
+  left: 14px;
+  bottom: 5px;
+  color: rgba(255,255,255,0.72);
+}
+
+body.presentation-mode .node {
+  min-width: auto;
+  min-height: auto;
+  padding: 2px 4px;
+
+  background: transparent;
+  border: none;
+  box-shadow: none;
+
+  color: #111;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+body.presentation-mode path {
+  stroke: #111;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.editor-mode path {
+  stroke: #111;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.node.primary-selected {
+  outline: 3px solid #111;
+  outline-offset: 4px;
+}
+
+.node.secondary-selected {
+  outline: 2px solid rgba(247, 129, 219, 0.95);
+  outline-offset: 4px;
+}
+
+/* Beta pública: ajustes de interfaz */
+#toolbar {
+  max-width: min(920px, calc(100vw - 360px));
+}
+
+#toolbar button {
+  letter-spacing: -0.01em;
+}
+
+#editorToggle,
+#view3DButton,
+#directionToggle {
+  background: #f7f7f8;
+}
+
+#deleteNode {
+  color: #8f1d1d;
+  background: #fff5f5;
+}
+
+#betaBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #555;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+#appToast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 50;
+  transform: translate(-50%, 18px);
+  opacity: 0;
+  pointer-events: none;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(20, 20, 20, 0.88);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+#appToast.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (max-width: 900px) {
+  #toolbar {
+    left: 12px;
+    right: 12px;
+    top: 12px;
+    max-width: none;
+    justify-content: center;
+  }
+
+  #helpPanel {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    max-width: 260px;
+  }
+
+  button {
+    padding: 7px 10px;
+  }
+}
+#welcomeScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top, rgba(184,108,255,0.18), transparent 35%),
+    rgba(245,245,247,0.96);
+  backdrop-filter: blur(18px);
+}
+
+#welcomeScreen.hidden {
+  display: none;
+}
+
+#welcomeCard {
+  width: min(520px, calc(100vw - 40px));
+  padding: 34px;
+  border-radius: 28px;
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 28px 80px rgba(0,0,0,0.16);
+  text-align: center;
+}
+
+#welcomeCard h1 {
+  margin: 12px 0 8px;
+  font-size: 42px;
+}
+
+#welcomeCard p {
+  color: #555;
+  font-size: 16px;
+}
+
+.betaTag {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #eee;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.welcomeActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+#startSample {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: white;
+}
+.brandBlock {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px;
+}
+
+.brandBlock h1 {
+  margin: 0;
+  font-size: 72px;
+  letter-spacing: -2px;
+}
+
+.brandBlock span {
+  font-size: 18px;
+  font-weight: 700;
+  color: #666;
+}
+
+.slogan {
+  margin: 38px auto;
+  max-width: 700px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.slogan span {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #222;
+}
+
+.sloganLine {
+  width: 60px;
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(184,108,255,0.25),
+      rgba(184,108,255,0.9)
+    );
+
+  border-radius: 999px;
+}
+
+.slogan p {
+  width: 100%;
+  margin-top: 16px;
+
+  text-align: center;
+
+  font-size: 15px;
+  line-height: 1.5;
+
+  color: #666;
+  font-weight: 500;
+}
+
+.licenseBanner {
+  margin: 22px auto 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.06);
+  color: #444;
+  font-size: 12px;
+  font-weight: 700;
+}

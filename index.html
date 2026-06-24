@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mapa de Nodos · Beta</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="editor-mode">
+  <div id="welcomeScreen">
+  <div id="welcomeCard">
+    <span class="betaTag">Beta 0.1.0
+</span>
+    <div class="brandBlock">
+  <h1>LULA</h1>
+  <span>mapas de nodos</span>
+</div>
+
+<div class="slogan">
+  <span>buscar</span>
+  <div class="sloganLine"></div>
+  <span>encontrar</span>
+  <div class="sloganLine"></div>
+  <span>conectar</span>
+
+  <p>
+    La creatividad aparece cuando encuentras conexiones donde antes no existían.
+  </p>
+</div>
+
+<div class="licenseBanner">
+  Licencia Creative Commons (CC0-1.0) · Desarrollado por: malvoro
+</div>
+
+    <div class="welcomeActions">
+      <button id="startSample">Abrir mapa de ejemplo</button>
+      <button id="startBlank">Empezar vacío</button>
+    </div>
+  </div>
+</div>
+  <div id="threeContainer"></div>
+
+  <div id="toolbar">
+    <button id="addNode">Agregar nodo</button>
+    <button id="newProject">Nuevo proyecto</button>
+    <button id="homeButton">Inicio</button>
+    <button id="editorToggle">Editor ON</button>
+    <button id="view3DButton">3D</button>
+    <button id="publishMode" title="Exportar el mapa como archivo OBJ">Exportar OBJ</button>
+    <button id="deleteNode">Eliminar nodo</button>
+    <button id="directionToggle">Dirección: →</button>
+    <button id="saveProject">Guardar</button>
+    <button id="openProject">Abrir</button>
+
+    <input
+      type="file"
+      id="loadProject"
+      accept=".json"
+      style="display:none;"
+    >
+
+    <span id="currentFile"></span>
+    <span id="betaBadge">Beta pública</span>
+  </div>
+
+  <div id="helpPanel">
+    <div id="helpHeader">
+      <strong>Controles</strong>
+      <button id="collapseHelpButton">-</button>
+    </div>
+
+    <div id="helpContent">
+      <p>Clic sostenido: arrastrar nodo</p>
+      <p>Doble clic: editar / seleccionar nodo</p>
+      <p>⌘ + arrastrar: selección múltiple</p>
+      <p>Shift + L: crear conexión</p>
+      <p>Shift + U: borrar conexión</p>
+      <p>Shift + N: crear nodo hijo</p>
+      <p>Shift + Z + mover arriba/abajo: ajustar profundidad Z</p>
+      <p>Botón 3D/2D: alternar vista espacial</p>
+      <p>Editor ON/OFF: mostrar u ocultar ayudas de edición</p>
+      <p>Cmd + S: guardar proyecto JSON</p>
+    </div>
+  </div>
+
+  <div id="canvas">
+    <div id="selectionBox"></div>
+
+    <div id="world">
+      <svg id="connections"></svg>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { OBJExporter } from "three/addons/exporters/OBJExporter.js";
+import { FontLoader } from "three/addons/loaders/FontLoader.js";
+import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+
+window.FontLoader = FontLoader;
+window.TextGeometry = TextGeometry;
+    window.THREE = THREE;
+    window.OrbitControls = OrbitControls;
+    window.OBJExporter = OBJExporter;
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
